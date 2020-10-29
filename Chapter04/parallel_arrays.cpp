@@ -28,7 +28,7 @@ struct OriginalUser {
   bool is_playing_{};
 };
 
-auto num_users_at_level(short level, const std::vector<OriginalUser>& users) {
+auto num_users_at_level(short level, const std::vector<OriginalUser>& users) -> int {
   ScopedTimer t{"num_users_at_level (using OriginalUser)"};
   auto num_users = 0;
   for (const auto& user : users)
@@ -37,14 +37,15 @@ auto num_users_at_level(short level, const std::vector<OriginalUser>& users) {
   return num_users;
 }
 
-auto num_playing_users(const std::vector<OriginalUser>& users) {
+auto num_playing_users(const std::vector<OriginalUser>& users) -> int {
   ScopedTimer t{"num_playing_users (using OriginalUser)"};
-  return std::count_if(
+  const auto num_playing = std::count_if(
     users.begin(),
     users.end(),
     [](const auto& user) {
       return user.is_playing_;
     });
+  return static_cast<int>(num_playing);
 }
 
 
@@ -79,14 +80,15 @@ auto num_users_at_level(short level, const std::vector<User>& users) {
   return num_users;
 }
 
-auto num_playing_users(const std::vector<User>& users) {
+auto num_playing_users(const std::vector<User>& users) -> int {
   ScopedTimer t{"num_playing_users (using User)"};
-  return std::count_if(
+  const auto num_playing = std::count_if(
     users.begin(),
     users.end(),
     [](const auto& user) {
       return user.is_playing_;
     });
+  return static_cast<int>(num_playing);
 }
 
 //
@@ -96,14 +98,16 @@ auto num_playing_users(const std::vector<User>& users) {
 // This is the fastest way to compute the stats.
 //
 
-auto num_users_at_level(short level, const std::vector<short>& users) {
+auto num_users_at_level(short level, const std::vector<short>& users) -> int {
   ScopedTimer t{"num_users_at_level using vector<short>"};
-  return std::count(users.begin(), users.end(), level);
+  const auto num = std::count(users.begin(), users.end(), level);
+  return static_cast<int>(num);
 }
 
-auto num_playing_users(const std::vector<bool>& users) {
+auto num_playing_users(const std::vector<bool>& users) -> int {
   ScopedTimer t{"num_playing_users using vector<bool>"};
-  return std::count(users.begin(), users.end(), true);
+  const auto num = std::count(users.begin(), users.end(), true);
+  return static_cast<int>(num);
 }
 
 //
@@ -156,7 +160,7 @@ TEST(ParallelArrays, CompareProcessingTime) {
 
   std::cout << "done." << '\n';
 
-  auto n = 0ul;
+  auto n = 0;
   auto level = short{5};
 
   std::cout << '\n' << "+++ Count stats using OriginalUser +++" << '\n';
