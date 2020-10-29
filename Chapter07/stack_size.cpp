@@ -1,3 +1,8 @@
+#if _MSC_VER
+  #pragma warning(disable:4717) // recursive on all control paths, function will cause runtime stack overflow
+#endif
+
+
 #include <iostream>
 #include <gtest/gtest.h>
 
